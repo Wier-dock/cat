@@ -13,6 +13,10 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 
+	 for (int i = 1; i < argc; i++) {
+        printf("%s\n", argv[i]);
+    }
+
 	char buffer[1024];
 	while(fgets(buffer, sizeof(buffer), file) != NULL){
 		printf("%s", buffer);
