@@ -4,7 +4,7 @@ FLAGS= -Wall -Werror -Wextra -W
 all: build
 
 build: clean create_dir src/code/main.c 
-	$(CC) $(FLAGS) src/code/main.c -o ./build/main.c
+	$(CC) $(FLAGS) src/code/main.c -o ./build/app
 
 create_dir: 
 	mkdir -p build
