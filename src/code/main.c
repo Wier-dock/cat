@@ -2,6 +2,10 @@
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
+if (argc < 3) {
+    perror("более трех аргументов");
+    return 1;
+}
   if (argc < 2) {
     perror("Введите название файла");
     return 1;
