@@ -1,21 +1,33 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "../headers/cat.h"
 
 int main(int argc, char *argv[]) {
-if (argc < 3) {
-    perror("более трех аргументов");
+  if (argc == 1) {
+    perror("Введите название файла и флаги");
     return 1;
+  } else {
+    if (argc > 1) {
+      print_file(argc, argv);
+    }
+  }
+
+  return 0;
 }
-  if (argc < 2) {
-    perror("Введите название файла");
-    return 1;
+
+void print_file(int argc, char **argv) {
+  bool flag = false;
+  if (argc - 1 > 1) {
+    flag = true;
   }
 
   for (int i = 1; i < argc; ++i) {
     FILE *file = fopen(argv[i], "r");
     if (file == NULL) {
       perror("Файла не существует");
-      return 1;
+      return;
+    }
+
+    if (flag == true) {
+      printf("%s \n", argv[i]);
     }
 
     char buffer[1024];
@@ -25,6 +37,4 @@ if (argc < 3) {
 
     fclose(file);
   }
-
-  return 0;
 }

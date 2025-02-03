@@ -1,6 +1,10 @@
 #ifndef CAT_H
 #define CAT_H
 
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 struct Flags {
   bool flagB;  // нумерует только непустые строки //
   bool flagE;  // также отображает символы конца строки как $ //
@@ -9,8 +13,8 @@ struct Flags {
   bool flagT;  // также отображает табы как ^I //
 };
 
-void flag_parse(char **argv, struct *flags);
+void flag_parse(char **argv, struct Flags *flags);
 int handling_error(char **argv);
-void print_file(char filename);
+void print_file(int argc, char **argv);
 
 #endif
