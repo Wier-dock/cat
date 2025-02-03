@@ -38,3 +38,16 @@ void print_file(int argc, char **argv) {
     fclose(file);
   }
 }
+
+void flag_parse(char **argv, struct Flags *flags){
+  switch (argv[1]){
+	case "-b":
+		flags.flagB = true;
+		break;
+
+	default: 
+		flags.flagFree = true;
+		break;
+  }
+}
+

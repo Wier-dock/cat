@@ -11,6 +11,7 @@ struct Flags {
   bool flagN;  // нумерует все выходные строки //
   bool flagS;  // сжимает несколько смежных пустых строк //
   bool flagT;  // также отображает табы как ^I //
+  bool flagFree;  // когда флага нет // 
 };
 
 void flag_parse(char **argv, struct Flags *flags);
