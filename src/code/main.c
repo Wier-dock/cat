@@ -45,6 +45,22 @@ void flag_parse(char **argv, struct Flags *flags){
 		flags.flagB = true;
 		break;
 
+	case "-e":
+		flags.flagE = true;
+		break;
+
+	case "-s":
+		flags.flagN = true;
+		break;
+
+	case "-s":
+		flags.flagS = true;
+		break;
+
+	case "-t":
+		flags.flagT = true;
+		break;
+
 	default: 
 		flags.flagFree = true;
 		break;
