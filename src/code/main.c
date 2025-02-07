@@ -5,8 +5,13 @@ int main(int argc, char *argv[]) {
     perror("Введите название файла и флаги");
     return 1;
   } else {
+    struct Flags flags = {0,0,0,0,0,0};
     if (argc > 1) {
+      flag_parse(argv, &flags);
       print_file(argc, argv);
+
+      printf("%d\n%d\n%d\n%d\n%d\n%d\n", flags.flagB, flags.flagE, flags.flagN,
+             flags.flagS, flags.flagT, flags.flagFree);
     }
   }
 
@@ -39,31 +44,18 @@ void print_file(int argc, char **argv) {
   }
 }
 
-void flag_parse(char **argv, struct Flags *flags){
-  switch (argv[1]){
-	case "-b":
-		flags.flagB = true;
-		break;
-
-	case "-e":
-		flags.flagE = true;
-		break;
-
-	case "-s":
-		flags.flagN = true;
-		break;
-
-	case "-s":
-		flags.flagS = true;
-		break;
-
-	case "-t":
-		flags.flagT = true;
-		break;
-
-	default: 
-		flags.flagFree = true;
-		break;
+void flag_parse(char **argv, struct Flags *flags) {
+  if (!strcmp(argv[1], "-b")) {
+    flags->flagB = true;
+  } else if (!strcmp(argv[1], "-e")) {
+    flags->flagE = true;
+  } else if (!strcmp(argv[1], "-n")) {
+    flags->flagN = true;
+  } else if (!strcmp(argv[1], "-s")) {
+    flags->flagS = true;
+  } else if (!strcmp(argv[1], "-t")) {
+    flags->flagT = true;
+  } else {
+    flags->flagFree = true;
   }
 }
-
