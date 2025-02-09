@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-void print_file(int argc, char **argv) {
+void print_file(int argc, char **argv, struct Flags *flags) {
   bool flag = false;
   if (argc - 1 > 1) {
     flag = true;
