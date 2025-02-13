@@ -44,6 +44,9 @@ void print_file(int argc, char **argv, struct Flags flags) {
       if (flags.flagN == true) {
         printf("%d\t%s", numberOfLine++, buffer);
       }
+      if (flags.flagE == true) {
+        printf("%d\t%s",);
+      }
       if (flags.flagB == true) {
         if (strlen(buffer) >= 1 && buffer[0] != '\n') {
           printf("%d\t%s", numberOfLine++, buffer);
