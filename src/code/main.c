@@ -24,6 +24,9 @@ void print_file_EVT(int argc, char **argv, struct Flags flags) {
     }
     int ch = fgetc(file);
     while (ch != EOF) {
+      if(flags.flagE == true && ch == '\n'){
+        printf("$");
+      }
       fputc(ch, stdout);
       ch = fgetc(file);
     }
@@ -59,9 +62,6 @@ void print_file_BNS(int argc, char **argv, struct Flags flags) {
       }
       if (flags.flagN == true) {
         printf("%d\t%s", numberOfLine++, buffer);
-      }
-      if (flags.flagE == true) {
-        printf("%s", );
       }
       if (flags.flagB == true) {
         if (strlen(buffer) >= 1 && buffer[0] != '\n') {
