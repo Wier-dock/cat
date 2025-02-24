@@ -8,7 +8,12 @@ int main(int argc, char *argv[]) {
     struct Flags flags = {0, 0, 0, 0, 0, 0};
     if (argc > 1) {
       flag_parse(argv, &flags);
-      print_file_BNS(argc, argv, flags);
+
+      if (!flags.flagT || !flags.flagE) {
+        print_file_EVT(argc, argv, flags);
+      } else {
+        print_file_BNS(argc, argv, flags);
+      }
     }
   }
 
@@ -28,7 +33,8 @@ void print_file_EVT(int argc, char **argv, struct Flags flags) {
         printf("$");
       }
       if (flags.flagT == true && ch == '\t') {
-        printf("^I");
+        printf("^");
+        ch = '\t' + 64;
       }
       fputc(ch, stdout);
       ch = fgetc(file);
@@ -43,7 +49,7 @@ void print_file_BNS(int argc, char **argv, struct Flags flags) {
   if (argc - 1 > 1) {
     flag = true;
   }
-  if (flags.flagFree == false) {
+  if (!flags.flagFree) {
     startFromFile = 2;
   }
   for (int i = startFromFile; i < argc; ++i) {
@@ -53,20 +59,20 @@ void print_file_BNS(int argc, char **argv, struct Flags flags) {
       return;
     }
 
-    if (flag == true) {
+    if (!flag) {
       printf("%s \n", argv[i]);
     }
 
     int numberOfLine = 1;
     char buffer[1024];
     while (fgets(buffer, sizeof(buffer), file) != NULL) {
-      if (flags.flagFree == true) {
+      if (!flags.flagFree) {
         printf("%s", buffer);
       }
-      if (flags.flagN == true) {
+      if (!flags.flagN) {
         printf("%d\t%s", numberOfLine++, buffer);
       }
-      if (flags.flagB == true) {
+      if (!flags.flagB) {
         if (strlen(buffer) >= 1 && buffer[0] != '\n') {
           printf("%d\t%s", numberOfLine++, buffer);
         } else {
