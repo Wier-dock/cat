@@ -24,8 +24,11 @@ void print_file_EVT(int argc, char **argv, struct Flags flags) {
     }
     int ch = fgetc(file);
     while (ch != EOF) {
-      if(flags.flagE == true && ch == '\n'){
+      if (flags.flagE == true && ch == '\n') {
         printf("$");
+      }
+      if (flags.flagT == true && ch == '\t') {
+        printf("^I");
       }
       fputc(ch, stdout);
       ch = fgetc(file);
