@@ -8,11 +8,22 @@ int main(int argc, char *argv[]) {
     struct Flags flags = {0, 0, 0, 0, 0, 0};
     if (argc > 1) {
       flag_parse(argv, &flags);
+      int startFromFile = 2;
+      if (flags.flagFree == true) {
+        startFromFile = 1;
+      }
 
-      if (!flags.flagT || !flags.flagE) {
-        print_file_EVT(argc, argv, flags);
-      } else {
-        print_file_BNS(argc, argv, flags);
+      for (int i = startFromFile; i < argc; i++) {
+        FILE *fptr = fopen(argv[i], "r");
+        if (fptr == NULL) {
+          perror("файла не существует");
+          continue;
+        }
+        if (!flags.flagT || !flags.flagE) {
+          print_file_EVT(fptr, flags);
+        } else {
+          print_file_BNS(argc, argv, flags);
+        }
       }
     }
   }
@@ -20,26 +31,23 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-void print_file_EVT(int argc, char **argv, struct Flags flags) {
-  for (int i = 2; i < argc; ++i) {
-    FILE *file = fopen(argv[i], "r");
-    if (file == NULL) {
-      perror("Файла не существует");
-      return;
-    }
-    int ch = fgetc(file);
+void print_file_EVT(FILE *fptr, struct Flags flags) {
+  if (fptr != NULL) {
+    int ch = fgetc(fptr);
     while (ch != EOF) {
-      if (flags.flagE == true && ch == '\n') {
+      if (flags.flagE && ch == '\n') {
         printf("$");
       }
-      if (flags.flagT == true && ch == '\t') {
+      if (flags.flagT && ch == '\t') {
         printf("^");
         ch = '\t' + 64;
       }
       fputc(ch, stdout);
-      ch = fgetc(file);
+      ch = fgetc(fptr);
     }
-    fclose(file);
+    fclose(fptr);
+  } else {
+    fprintf(stderr, "cat: No such file or directory\n");
   }
 }
 
