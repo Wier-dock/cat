@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
         if (!flags.flagT || !flags.flagE) {
           print_file_EVT(fptr, flags);
         } else {
-          print_file_BNS(argc, argv, flags);
+          print_file_BNS(file, flags);
         }
       }
     }
@@ -37,8 +37,7 @@ void print_file_EVT(FILE *fptr, struct Flags flags) {
     while (ch != EOF) {
       if (flags.flagE && ch == '\n') {
         printf("$");
-      }
-      if (flags.flagT && ch == '\t') {
+      }  if (flags.flagT && ch == '\t') {
         printf("^");
         ch = '\t' + 64;
       }
@@ -51,11 +50,12 @@ void print_file_EVT(FILE *fptr, struct Flags flags) {
   }
 }
 
-void print_file_BNS(int argc, char **argv, struct Flags flags) {
-  int startFromFile = 1;
-  bool flag = false;
-  if (argc - 1 > 1) {
-    flag = true;
+void print_file_BNS(FILE *file, struct Flags flags) {
+  if(file != NULL){
+    int ch = fgetc(file);
+    while(ch != EOF)
+  }
+    flags = true;
   }
   if (!flags.flagFree) {
     startFromFile = 2;
@@ -91,7 +91,7 @@ void print_file_BNS(int argc, char **argv, struct Flags flags) {
 
     fclose(file);
   }
-}
+
 
 void flag_parse(char **argv, struct Flags *flags) {
   if (!strcmp(argv[1], "-b")) {
