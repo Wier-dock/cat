@@ -8,6 +8,9 @@ int main(int argc, char *argv[]) {
     struct Flags flags = {0, 0, 0, 0, 0, 0};
     if (argc > 1) {
       flag_parse(argv, &flags);
+
+      printf("%d\n%d\n%d\n%d\n%d\n", flags.flagFree, flags.flagB, flags.flagN, flags.flagE, flags.flagT);
+
       int startFromFile = 2;
       if (flags.flagFree == true) {
         startFromFile = 1;
@@ -22,7 +25,7 @@ int main(int argc, char *argv[]) {
         if (!flags.flagT || !flags.flagE) {
           print_file_EVT(fptr, flags);
         } else {
-          print_file_BNS(file, flags);
+          print_file_BNS(fptr, flags);
         }
       }
     }
@@ -46,43 +49,35 @@ void print_file_EVT(FILE *fptr, struct Flags flags) {
       ch = fgetc(fptr);
     }
     fclose(fptr);
+
   } else {
     fprintf(stderr, "cat: No such file or directory\n");
   }
 }
 
-void print_file_BNS(FILE *file, struct Flags flags) {
-  if (file != NULL) {
-    int ch = fgetc(file);
-    while (ch != EOF) }
-  flags = true;
-}
-if (!flags.flagFree) {
-  startFromFile = 2;
-
-  if (!flag) {
-    printf("%s \n", argv[i]);
-  }
-
-  int numberOfLine = 1;
-  char buffer[1024];
-  while (fgets(buffer, sizeof(buffer), file) != NULL) {
-    if (!flags.flagFree) {
-      printf("%s", buffer);
-    }
-    if (!flags.flagN) {
-      printf("%d\t%s", numberOfLine++, buffer);
-    }
-    if (!flags.flagB) {
-      if (strlen(buffer) >= 1 && buffer[0] != '\n') {
-        printf("%d\t%s", numberOfLine++, buffer);
-      } else {
-        printf("%s", buffer);
+void print_file_BNS(FILE *fptr, struct Flags flags) {
+  char buffer[2048];
+  int counter = 0;
+  if (fptr != NULL) {
+    while ((fgets(buffer, 2048, fptr)) != NULL) {
+      if (flags.flagN) {
+        printf("%d\t%s", counter++, buffer);
       }
+      if (flags.flagB) {
+        if (strlen(buffer) >= 1 && buffer[0] != '\n') {
+          printf("%d\t%s", counter++, buffer);
+        } else {
+          printf("%s", buffer);
+        }
+      }
+      // if (flags.flagFree) {
+      //   printf("%s", buffer);
+      // }
     }
+    fclose(fptr);
+  } else {
+    fprintf(stderr, "cat: No such file or directory\n");
   }
-
-  fclose(file);
 }
 
 void flag_parse(char **argv, struct Flags *flags) {

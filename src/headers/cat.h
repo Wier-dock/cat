@@ -17,7 +17,7 @@ struct Flags {
 
 void flag_parse(char **argv, struct Flags *flags);
 int handling_error(char **argv);
-void print_file_BNS(FILE *file, struct Flags flags);
+void print_file_BNS(FILE *fptr, struct Flags flags);
 void print_file_EVT(FILE *fptr, struct Flags flags);
 
 #endif
