@@ -12,6 +12,7 @@ struct Flags {
   bool flagN;  // нумерует все выходные строки //
   bool flagS;  // сжимает несколько смежных пустых строк //
   bool flagT;     // также отображает табы как ^I //
+  bool flagV;
   bool flagFree;  // когда флага нет //
 };
 

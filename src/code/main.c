@@ -9,8 +9,6 @@ int main(int argc, char *argv[]) {
     if (argc > 1) {
       flag_parse(argv, &flags);
 
-      printf("%d\n%d\n%d\n%d\n%d\n", flags.flagFree, flags.flagB, flags.flagN, flags.flagE, flags.flagT);
-
       int startFromFile = 2;
       if (flags.flagFree == true) {
         startFromFile = 1;
@@ -22,7 +20,7 @@ int main(int argc, char *argv[]) {
           perror("файла не существует");
           continue;
         }
-        if (!flags.flagT || !flags.flagE) {
+        if (flags.flagT || flags.flagE) {
           print_file_EVT(fptr, flags);
         } else {
           print_file_BNS(fptr, flags);
@@ -38,6 +36,18 @@ void print_file_EVT(FILE *fptr, struct Flags flags) {
   if (fptr != NULL) {
     int ch = fgetc(fptr);
     while (ch != EOF) {
+      if(flags.flagV ){
+        if (ch > 127 && ch < 160){
+          printf("M-^");
+        }
+        if((ch < 32 && ch != '\n' && ch != '\t')|| ch == 127){
+          printf("^");
+        }
+        if((ch < 32 || (ch > 126 && ch < 160)) && ch != '\n' && ch != '\t'){
+          ch = ch > 126 ? ch - 128 + 64 : ch + 64;
+        }
+      }
+
       if (flags.flagE && ch == '\n') {
         printf("$");
       }
@@ -57,22 +67,40 @@ void print_file_EVT(FILE *fptr, struct Flags flags) {
 
 void print_file_BNS(FILE *fptr, struct Flags flags) {
   char buffer[2048];
-  int counter = 0;
+  int counter = 1;
+  int gobble = 0;
+
   if (fptr != NULL) {
     while ((fgets(buffer, 2048, fptr)) != NULL) {
       if (flags.flagN) {
         printf("%d\t%s", counter++, buffer);
       }
+
       if (flags.flagB) {
-        if (strlen(buffer) >= 1 && buffer[0] != '\n') {
-          printf("%d\t%s", counter++, buffer);
+        if (strlen(buffer) >= 1 && buffer[1] != '\n') {
+          printf("%6d\t%s", counter++, buffer);
         } else {
           printf("%s", buffer);
         }
       }
-      // if (flags.flagFree) {
-      //   printf("%s", buffer);
-      // }
+
+      if (flags.flagS) {
+        if (strlen(buffer) <= 2) {
+          if (gobble == 1) {
+            continue;
+          } else {
+            gobble++;
+            printf("%s", buffer);
+          }
+        } else {
+          gobble = 0;
+          printf("%s", buffer);
+        }
+      }
+
+      if (flags.flagFree) {
+        printf("%s", buffer);
+      }
     }
     fclose(fptr);
   } else {
@@ -91,6 +119,8 @@ void flag_parse(char **argv, struct Flags *flags) {
     flags->flagS = true;
   } else if (!strcmp(argv[1], "-t")) {
     flags->flagT = true;
+  }else if(!strcmp(argv[1], "-v")){
+    flags->flagV = true;
   } else {
     flags->flagFree = true;
   }
