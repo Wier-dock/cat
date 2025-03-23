@@ -5,10 +5,10 @@ int main(int argc, char *argv[]) {
     perror("Введите название файла и флаги");
     return 1;
   } else {
-    struct Flags flags = {0, 0, 0, 0, 0, 0};
+    struct Flags flags = {0, 0, 0, 0, 0, 0,0};
     if (argc > 1) {
       flag_parse(argv, &flags);
-
+  
       int startFromFile = 2;
       if (flags.flagFree == true) {
         startFromFile = 1;
@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
           perror("файла не существует");
           continue;
         }
-        if (flags.flagT || flags.flagE) {
+        if (flags.flagT || flags.flagE || flags.flagV) {
           print_file_EVT(fptr, flags);
         } else {
           print_file_BNS(fptr, flags);
@@ -37,15 +37,7 @@ void print_file_EVT(FILE *fptr, struct Flags flags) {
     int ch = fgetc(fptr);
     while (ch != EOF) {
       if(flags.flagV ){
-        if (ch > 127 && ch < 160){
-          printf("M-^");
-        }
-        if((ch < 32 && ch != '\n' && ch != '\t')|| ch == 127){
-          printf("^");
-        }
-        if((ch < 32 || (ch > 126 && ch < 160)) && ch != '\n' && ch != '\t'){
-          ch = ch > 126 ? ch - 128 + 64 : ch + 64;
-        }
+        print_flag_V(ch);
       }
 
       if (flags.flagE && ch == '\n') {
@@ -62,6 +54,18 @@ void print_file_EVT(FILE *fptr, struct Flags flags) {
 
   } else {
     fprintf(stderr, "cat: No such file or directory\n");
+  }
+}
+
+void print_flag_V(int ch){
+  if (ch > 127 && ch < 160){
+    printf("M-^");
+  }
+  if((ch < 32 && ch != '\n' && ch != '\t')|| ch == 127){
+    printf("^");
+  }
+  if((ch < 32 || (ch > 126 && ch < 160)) && ch != '\n' && ch != '\t'){
+    ch = ch > 126 ? ch - 128 + 64 : ch + 64;
   }
 }
 
@@ -85,17 +89,7 @@ void print_file_BNS(FILE *fptr, struct Flags flags) {
       }
 
       if (flags.flagS) {
-        if (strlen(buffer) <= 2) {
-          if (gobble == 1) {
-            continue;
-          } else {
-            gobble++;
-            printf("%s", buffer);
-          }
-        } else {
-          gobble = 0;
-          printf("%s", buffer);
-        }
+        gobble = print_flag_S(buffer, gobble);
       }
 
       if (flags.flagFree) {
@@ -106,6 +100,22 @@ void print_file_BNS(FILE *fptr, struct Flags flags) {
   } else {
     fprintf(stderr, "cat: No such file or directory\n");
   }
+}
+
+int print_flag_S(char buffer[2048], int gobble){
+  if (strlen(buffer) <= 2) {
+    if (gobble == 1) {
+      return 1;
+    } else {
+      gobble++;
+      printf("%s", buffer);
+    }
+  } else {
+    gobble = 0;
+    printf("%s", buffer);
+  }
+
+  return gobble;
 }
 
 void flag_parse(char **argv, struct Flags *flags) {

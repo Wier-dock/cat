@@ -21,4 +21,7 @@ int handling_error(char **argv);
 void print_file_BNS(FILE *fptr, struct Flags flags);
 void print_file_EVT(FILE *fptr, struct Flags flags);
 
+void print_flag_V(int ch);
+int print_flag_S(char buffer[2048], int gobble);
+
 #endif
