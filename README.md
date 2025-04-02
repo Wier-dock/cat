@@ -1,6 +1,6 @@
 # Cat
 ## main.c
-#### Добовляем библеотеку.
+#### Добовляем библиотеку.
 ```c
 #include "../headers/cat.h"
 ```
@@ -169,4 +169,40 @@ void flag_parse(char **argv, struct Flags *flags) {
     flags->flagFree = true;
   }
 }
+```
+
+## cat.h
+#### Добовляем библиотеки.
+```c
+#ifndef CAT_H
+#define CAT_H
+
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+```
+#### Создаем структуру в которой обьявляем флаги с помощью булевой переменной.
+```c
+struct Flags {
+  bool flagB;  // нумерует только непустые строки //
+  bool flagE;  // также отображает символы конца строки как $ //
+  bool flagN;  // нумерует все выходные строки //
+  bool flagS;  // сжимает несколько смежных пустых строк //
+  bool flagT;     // также отображает табы как ^I //
+  bool flagV;
+  bool flagFree;  // когда флага нет //
+};
+```
+#### Обьявляем функции которые мы используем в main.c.
+```c
+void flag_parse(char **argv, struct Flags *flags);
+int handling_error(char **argv);
+void print_file_BNS(FILE *fptr, struct Flags flags);
+void print_file_EVT(FILE *fptr, struct Flags flags);
+
+void print_flag_V(int ch);
+int print_flag_S(char buffer[2048], int gobble);
+
+#endif
 ```
